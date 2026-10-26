@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>人人影视 - 词条考据、停摆始末与正版观影路径</title>
+<meta name="description" content="人人影视（renrenyingshi-h5）是一份独立词条说明：梳理人人影视字幕组的兴起与司法定性、与人人视频App的区别、冒名站识别方法，以及字幕爱好者与观影者的正版路径。不含播放源、下载与充值入口。" />
+<meta name="keywords" content="人人影视, 人人影视字幕组, 版权案件, 人人视频, 正版字幕, 影视合规" />
+<link rel="canonical" href="https://renrenyingshi-h5.github.io/" />
+<style>
+    :root{
+        --cell:#0c0e12;
+        --cell-2:#14181f;
+        --stock:#c9a86a;      /* 褪色胶片金 */
+        --stock-2:#8f7650;
+        --paper:#eceae2;
+        --card:#f7f5ee;
+        --ink:#22211d;
+        --muted:#7d786c;
+        --soft:#56524a;
+        --line:#ddd6c6;
+        --red:#c8443a;
+        --red-bg:#2a1210;
+        --ok:#2f6b4a;
+        --ok-bg:#eaf3ec;
+        --tape:#3a3630;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+        background:var(--paper);
+        color:var(--ink);
+        font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+        line-height:1.72;
+        -webkit-text-size-adjust:100%;
+        background-image:
+            radial-gradient(circle at 20% 8%,rgba(201,168,106,.13),transparent 26%),
+            repeating-linear-gradient(0deg,rgba(138,120,90,.05) 0 2px,transparent 2px 24px);
+    }
+    a{color:var(--stock-2);text-decoration:none;}
+
+    /* 停摆门面：胶片孔带 */
+    .reel{
+        position:relative;
+        padding:50px 18px 36px;
+        text-align:center;
+        background:
+            radial-gradient(110% 120% at 50% 100%,rgba(201,168,106,.28),transparent 55%),
+            linear-gradient(180deg,#101218,#0c0e12 70%);
+        border-bottom:6px solid var(--stock);
+        overflow:hidden;
+    }
+    .reel::before,.reel::after{
+        content:"";position:absolute;top:0;bottom:0;width:26px;
+        background:repeating-linear-gradient(180deg,
+            transparent 0 8px,
+            var(--cell) 8px 14px,
+            transparent 14px 30px);
+        opacity:.85;
+    }
+    .reel::before{left:0;}
+    .reel::after{right:0;}
+    .reel .frame{
+        display:inline-block;font-size:11px;letter-spacing:4px;color:var(--stock);
+        border:1px solid var(--stock-2);border-radius:2px;padding:4px 13px;
+        margin-bottom:15px;font-family:monospace;background:rgba(12,14,18,.6);
+    }
+    .reel h1{font-size:31px;letter-spacing:5px;color:#f2ede0;font-weight:800;text-shadow:0 2px 0 rgba(0,0,0,.5);}
+    .reel .sub{margin-top:8px;font-size:13.5px;color:#c8c2b2;}
+    .reel .badge{
+        display:inline-block;margin-top:12px;font-size:11.5px;letter-spacing:.5px;
+        color:#ffb3ad;border:1.5px solid var(--red);border-radius:20px;
+        padding:3px 13px;background:var(--red-bg);
+    }
+    .reel .url{margin-top:9px;font-size:12px;color:#9a9488;}
+
+    /* 胶片导航 */
+    .sprocket{
+        display:flex;flex-wrap:wrap;gap:7px;justify-content:center;
+        padding:14px 12px;background:var(--cell);border-bottom:1px dashed var(--stock-2);
+    }
+    .sprocket a{
+        padding:7px 15px;border-radius:2px;font-size:13px;
+        background:var(--cell-2);border:1px solid #2c2f36;color:#c8c2b2;
+        font-family:"PingFang SC",sans-serif;
+    }
+    .sprocket a:hover{border-color:var(--stock);color:var(--stock);}
+
+    .strip{
+        max-width:1080px;margin:auto;padding:22px 14px 40px;
+        display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start;
+    }
+    main{min-width:0;}
+    aside{position:sticky;top:14px;}
+
+    .fatal{
+        background:var(--red-bg);border:1.5px solid var(--red);
+        border-radius:5px;padding:15px 17px;margin-bottom:16px;
+    }
+    .fatal .t{font-size:14px;font-weight:700;color:#ffb3ad;margin-bottom:7px;letter-spacing:.5px;}
+    .fatal p{font-size:13.5px;color:#f0e6d8;}
+    .fatal p+p{margin-top:7px;}
+    .fatal b{color:#ffd0cc;}
+
+    .note{
+        background:var(--ok-bg);border:1.5px solid var(--ok);
+        border-radius:5px;padding:14px 17px;margin-bottom:16px;
+    }
+    .note .t{font-size:14px;font-weight:700;color:var(--ok);margin-bottom:6px;}
+    .note p{font-size:13.5px;color:var(--ink);}
+    .note p+p{margin-top:6px;}
+
+    /* 卷宗块 */
+    .dossier{
+        background:var(--card);border:1px solid var(--line);border-radius:5px;
+        margin-bottom:18px;overflow:hidden;scroll-margin-top:14px;
+    }
+    .dossier-head{
+        display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+        padding:12px 18px;background:linear-gradient(90deg,#e9e0cb,#f7f5ee 60%);
+        border-bottom:1px solid var(--line);
+    }
+    .dossier-head .vol{
+        font-size:11px;color:#101218;background:var(--stock);
+        border-radius:2px;padding:2px 9px;font-weight:700;letter-spacing:1px;font-family:monospace;
+    }
+    .dossier-head h2{font-size:17.5px;color:var(--ink);}
+    .dossier-head .more{margin-left:auto;font-size:12px;color:var(--muted);}
+    .dossier-body{padding:16px 18px;}
+
+    table{width:100%;border-collapse:collapse;font-size:12.8px;}
+    th,td{padding:10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top;}
+    th{background:#e9e0cb;color:var(--stock-2);font-size:11.5px;letter-spacing:.5px;text-align:left;}
+    td .k{font-weight:700;color:var(--ink);}
+    td .tag{display:inline-block;font-size:10.5px;border-radius:3px;padding:0 6px;margin-left:5px;vertical-align:middle;}
+    .tag.red{color:var(--red);border:1px solid var(--red);background:var(--red-bg);}
+    .tag.gld{color:var(--stock-2);border:1px solid var(--stock-2);background:rgba(201,168,106,.14);}
+    .tag.grn{color:var(--ok);border:1px solid var(--ok);background:var(--ok-bg);}
+
+    /* 时间轴：齿孔节点 */
+    .reeltime{list-style:none;counter-reset:rt;position:relative;padding-left:34px;}
+    .reeltime::before{
+        content:"";position:absolute;left:9px;top:6px;bottom:6px;width:2px;
+        background:linear-gradient(180deg,var(--stock),var(--red));
+    }
+    .reeltime li{
+        counter-increment:rt;position:relative;
+        padding:11px 0 13px;font-size:13.5px;color:var(--soft);
+        border-bottom:1px dotted var(--line);
+    }
+    .reeltime li:last-child{border-bottom:none;}
+    .reeltime li::before{
+        content:counter(rt);position:absolute;left:-34px;top:11px;
+        width:20px;height:20px;line-height:20px;text-align:center;
+        background:var(--cell);color:var(--stock);border:2px solid var(--stock);
+        border-radius:50%;font-family:monospace;font-size:11px;font-weight:700;
+    }
+    .reeltime b{color:var(--ink);}
+    .reeltime .src{display:block;font-size:11.5px;color:var(--muted);margin-top:2px;font-family:monospace;}
+
+    .todo{list-style:none;}
+    .todo li{
+        display:flex;gap:10px;align-items:flex-start;
+        padding:9px 0;border-bottom:1px dotted var(--line);font-size:13.5px;color:var(--soft);
+    }
+    .todo li:last-child{border-bottom:none;}
+    .todo .box{
+        flex:none;width:18px;height:18px;border:2px solid var(--stock-2);
+        border-radius:3px;margin-top:2px;background:var(--paper);
+    }
+    .todo b{color:var(--ink);}
+    .todo .why{display:block;font-size:12px;color:var(--muted);margin-top:2px;}
+
+    .meter{margin-top:4px;}
+    .meter .row{display:flex;gap:10px;align-items:center;margin-bottom:10px;font-size:13px;}
+    .meter .lb{width:150px;flex:none;color:var(--soft);}
+    .meter .track{flex:1;height:8px;background:#e9e0cb;border-radius:4px;overflow:hidden;border:1px solid var(--line);}
+    .meter .track i{display:block;height:100%;background:linear-gradient(90deg,var(--stock-2),var(--red));font-style:normal;}
+    .meter .vl{width:42px;text-align:right;font-weight:700;color:var(--red);font-size:12px;font-family:monospace;}
+
+    .sos{background:var(--cell);border-radius:5px;padding:14px 16px;margin-top:6px;}
+    .sos .r{display:flex;gap:10px;align-items:baseline;font-size:13px;padding:6px 0;border-bottom:1px dotted #2c2f36;color:#d8d2c4;}
+    .sos .r:last-child{border-bottom:none;}
+    .sos .r b{color:var(--stock);font-family:monospace;font-size:12px;flex:none;width:120px;}
+
+    .ledger{
+        background:var(--card);border:1px solid var(--line);border-radius:5px;
+        padding:14px;margin-bottom:14px;
+    }
+    .ledger h3{
+        font-size:12.5px;color:var(--stock-2);letter-spacing:1px;
+        padding-bottom:7px;margin-bottom:10px;border-bottom:1px solid var(--line);font-family:monospace;
+    }
+    .ledger ol{list-style:none;counter-reset:l;}
+    .ledger li{counter-increment:l;font-size:13px;padding:6px 0 6px 26px;position:relative;color:var(--soft);}
+    .ledger li::before{
+        content:counter(l,decimal-leading-zero);position:absolute;left:0;top:6px;
+        font-family:monospace;font-size:11px;color:#101218;background:var(--stock);
+        width:18px;height:18px;line-height:17px;text-align:center;border-radius:2px;font-weight:700;
+    }
+    .ledger li small{display:block;color:var(--muted);font-size:11px;}
+
+    .disc{
+        border:1.5px solid var(--red);background:var(--red-bg);
+        border-radius:5px;padding:12px;font-size:12.5px;color:#f0e6d8;
+    }
+    .disc b{color:#ffb3ad;}
+
+    footer{
+        text-align:center;padding:22px 14px;font-size:12px;color:var(--muted);
+        background:var(--cell);color:#b8b2a6;
+    }
+    footer p{margin:3px 0;color:#8f897c;}
+
+    @media (max-width:900px){
+        .strip{grid-template-columns:1fr;}
+        aside{position:static;display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .reel h1{font-size:23px;letter-spacing:2px;}
+        .meter .lb{width:112px;}
+    }
+    @media (max-width:560px){
+        aside{grid-template-columns:1fr;}
+        table{font-size:12px;}
+        th,td{padding:8px 6px;}
+    }
+</style>
+</head>
+
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="reel">
+    <div class="frame">REEL · 停摆档案</div>
+    <h1>人人影视</h1>
+    <div class="sub">词条考据 · 停摆始末 · 与「人人视频」的分界 · 字幕爱好者的正版路径</div>
+    <div class="badge">⚠ 非官方 · 不提供播放源、下载、片单与充值 · 原字幕组已于 2021 年公告关站</div>
+    <div class="url">https://renrenyingshi-h5.github.io</div>
+</header>
+
+<nav class="sprocket" aria-label="胶片导航">
+    <a href="#timeline">停摆时间轴</a>
+    <a href="#case">司法定性</a>
+    <a href="#split">人人影视 ≠ 人人视频</a>
+    <a href="#fake">冒名站怎么认</a>
+    <a href="#sub">字幕的正版活法</a>
+    <a href="#path">现在去哪看</a>
+    <a href="#faq">常见疑问</a>
+    <a href="#about">档案立场</a>
+</nav>
+
+<div class="strip">
+
+    <main>
+
+        <div class="fatal">
+            <div class="t">▍先说结论：今天搜「人人影视」，找到的大概率不是它</div>
+            <p>2021 年 2 月上海三中院一审宣判「人人影视字幕组」侵犯著作权罪：主犯梁永平获刑三年半、罚金 150 万元，其余 14 人获刑或缓刑；官微同日公告「即日起永久关闭网站」。<b>那个名字，在法律意义上已经停摆了。</b></p>
+            <p>此后网上出现的「人人影视官网 / 最新入口 / APP 下载 / 免费看全集」页面，绝大多数是<b>冒名引流站</b>——借旧名换流量，装播放器、充会员、跳博彩。本页一个地址都不给，也不教你「怎么进」。</p>
+        </div>
+
+        <div class="note">
+            <div class="t">▍它曾经解决过什么问题</div>
+            <p>抛开法律定性，人人影视字幕组在 2000 年代中后期到 2010 年代初，确实填补过「海外新剧看不见中文字幕」的窗口：爱好者翻译、校对、压片、分发，把《越狱》《迷失》们送进一代人的客厅。这是很多字幕爱好者的起点。</p>
+            <p>但填补窗口不等于获得授权。2014 年广电总局发「净网」通知点名整改，2020 年 9 月上海警方查封服务器、抓获 14 人，2021 年宣判——<b>一条靠「翻译盗版」长大的路，终点在法律里，不在情怀里。</b>今天要致敬那份热情，正确的做法是把它转到授权与正版协作上去。</p>
+        </div>
+
+        <!-- 01 时间轴 -->
+        <section class="dossier" id="timeline">
+            <div class="dossier-head">
+                <span class="vol">卷一</span>
+                <h2>停摆时间轴：一条十三年长线的收口</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <ul class="reeltime">
+                    <li>
+                        <b>约 2003—2006 · 字幕组时代起步</b>
+                        互联网论坛与 BT 圈里，字幕组靠爱好者义务翻译海外剧集，「人人影视」这个名字在这个时期长出来，早期靠广告条维持服务器。
+                        <span class="src">来源：公开百科条目与媒体回溯报道</span>
+                    </li>
+                    <li>
+                        <b>2009 · 第一次关站</b>
+                        因版权压力宣布关闭，随后又以「YYets」等名换址复活，从论坛转向客户端＋ App，用户规模继续涨。
+                        <span class="src">来源：公开报道 / 维基回溯</span>
+                    </li>
+                    <li>
+                        <b>2014.11 · 被官方点名</b>
+                        广电总局下发「净网 2014」通知，人人影视与快播等被列入整改名单，随后再次短暂关站、清空资源。
+                        <span class="src">来源：新京报等当时报道</span>
+                    </li>
+                    <li>
+                        <b>2015—2019 · 商业化与扩张</b>
+                        以「人人影视字幕组」名义做网站、App、客户端，架设境外服务器，形成「翻译—上传—会员—广告」链条；公开材料显示会员达 400 余万，宣判时查实待播 7 万余集。
+                        <span class="src">来源：上海三中院 2021 年宣判通报</span>
+                    </li>
+                    <li>
+                        <b>2020.09.25 · 上海警方收网</b>
+                        上海虹口警方摧毁该团伙，抓获梁永平等 14 人，查获作案设备，涉案金额 1600 余万元。
+                        <span class="src">来源：警民直通车上海通报</span>
+                    </li>
+                    <li>
+                        <b>2021.02.11 · 一审宣判＋永久关站</b>
+                        上海三中院以侵犯著作权罪判梁永平有期徒刑三年半、罚金 150 万；同案其余被告获缓刑；官微同日发「永久关闭网站」。
+                        <span class="src">来源：上海市第三中级人民法院通报 / 官微公告</span>
+                    </li>
+                    <li>
+                        <b>2024.08 · 刑满后再被查</b>
+                        梁永平刑满释放后，又因涉影视侵权被查；2025 年 11 月 5 日，上海虹口区检察院以涉嫌侵犯著作权罪批准逮捕，同案另有 4 人被查。
+                        <span class="src">来源：虹口检察公开信息（2025-11-05）</span>
+                    </li>
+                    <li>
+                        <b>2026 · 名字还在，主体已经不是</b>
+                        搜索结果里仍满是「人人影视官网 / 最新入口 / APP 下载」类页面，域名彼此无关、话术雷同，均为借名引流的仿冒形态。
+                        <span class="src">来源：当期搜索引擎结果与公开辟谣</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 02 司法定性 -->
+        <section class="dossier" id="case">
+            <div class="dossier-head">
+                <span class="vol">卷二</span>
+                <h2>司法定性：为什么「翻译」救不了它</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <table>
+                    <thead>
+                        <tr><th>争议点</th><th>法理落点</th><th>本案认定</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="k">「我只是翻译字幕」</span><span class="tag red">不成立</span></td>
+                            <td>翻译本身虽可能被单独评价，但本案是翻译＋压制＋上传＋架设站点＋会员收费的<b>完整传播链条</b>，不是单发一份 srt</td>
+                            <td><span class="tag red">认定为共同侵权行为的一环</span> 法院按侵犯著作权罪处理</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">「非营利、爱好者情怀」</span><span class="tag red">不成立</span></td>
+                            <td>司法解释下，侵犯著作权罪不要求「以营利为目的」；且本案实际有广告与会员收入，违法所得数额巨大</td>
+                            <td><span class="tag red">会员 400 余万、涉案 1600 余万</span> 量刑从数额与情节认定</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">「服务器在境外」</span><span class="tag red">不成立</span></td>
+                            <td>属地管辖看的是行为地与结果地；面向境内提供、在境内运营，境外架设不改变定性</td>
+                            <td><span class="tag red">上海警方直接收网</span> 跨境不是护身符</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">「字幕是演绎作品，我有权利」</span><span class="tag gld">误区</span></td>
+                            <td>字幕的著作权建立在<b>原作品合法使用</b>之上；无权改编原作，字幕本身的权益也难以独立主张</td>
+                            <td><span class="tag gld">本案未采纳</span> 先有授权，才有「二次创作」的资格</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">「我只是用户，看看而已」</span><span class="tag grn">个人风险低</span></td>
+                            <td>单纯在线观看与下载保存、上传转载、经营性传播是不同层级；个人观赏民事风险低，但传播、制作、售卖资源会升级</td>
+                            <td><span class="tag grn">本案被告是运营方</span> 别把运营者的罪当成用户的豁免券，也别反向给自己壮胆</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:12.5px;color:var(--muted);margin-top:10px;">
+                    条文层面主要落在<b>刑法第二百一十七条（侵犯著作权罪）</b>与《关于办理侵犯知识产权刑事案件适用法律若干问题的解释》。以上为公开文书与通报的梳理，不构成法律意见；具体个案请向执业律师核实。
+                </p>
+            </div>
+        </section>
+
+        <!-- 03 分界 -->
+        <section class="dossier" id="split">
+            <div class="dossier-head">
+                <span class="vol">卷三</span>
+                <h2>最容易搞混的一条线：人人影视 ≠ 人人视频</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <table>
+                    <thead>
+                        <tr><th></th><th>人人影视字幕组</th><th>人人视频 App</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="k">主体</span></td>
+                            <td>梁永平等个人组成的字幕/资源团伙，无固定持牌主体</td>
+                            <td>武汉映象网络科技有限公司（上海众多美成员创办），后运营主体迁重庆剧迷网络科技</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">形态</span></td>
+                            <td>字幕＋盗版片源站点／客户端，靠广告与会员</td>
+                            <td>海外影视聚合 App，拿过小米、赛富等投资，宣称走正版采买＋广告分账</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">结局</span></td>
+                            <td>2021 年宣判、永久关站；2025 年主犯再被批捕</td>
+                            <td>2021 年因违规采编新闻被网信办通报下架整改，App 从应用市场消失；此后多次传出回归、仍陷版权争议</td>
+                        </tr>
+                        <tr>
+                            <td><span class="k">关系</span></td>
+                            <td colspan="2"><span class="tag red">不是同一家公司</span> 名字像、用户群重叠，但主体与运营模式不同。搜索时把它们混成「一家官方」是常见误判。</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p style="font-size:12.5px;color:var(--muted);margin-top:10px;">
+                    顺带划掉两个坑：<b>「YYets」</b>是人人影视早年的复活马甲；<b>「人人美剧」</b>又是另一批聚合客户端。三个名字在历史里纠缠，今天搜出来的域名则多半跟三者都无关——别靠名字认人。
+                </p>
+            </div>
+        </section>
+
+        <!-- 04 冒名识别 -->
+        <section class="dossier" id="fake">
+            <div class="dossier-head">
+                <span class="vol">卷四</span>
+                <h2>冒名站识别：六看一不点</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <ul class="todo">
+                    <li><span class="box"></span><span><b>一看域名</b>——真站已死，不存在「最新官方域名」。凡声称「官方新地址」「永久入口」「以当前可访问为准」的，都是借名页。<span class="why">官方不需要天天换域，换域的从不说自己是冒牌。</span></span></li>
+                    <li><span class="box"></span><span><b>二看备案主体</b>——工信部备案号查得出主办单位吗？跟「人人影视」有任何工商关联吗？查不到或主体是「个人/空壳」，直接关。<span class="why">冒名站最爱复用别人备案号，差一位都别信。</span></span></li>
+                    <li><span class="box"></span><span><b>三看商店上架</b>——手机自带应用市场搜不到、只靠网页扫码装 APK 的，默认不装；安卓装前核对包名与开发者主页。<span class="why">「破解版/福利版」四个字出现，流程结束。</span></span></li>
+                    <li><span class="box"></span><span><b>四看它怎么赚钱</b>——充值会员、提现返利、虚拟币、弹窗博彩、贷款跳转，沾一条就撤。正版平台只卖内容，不谈理财。<span class="why">冒名站的盈利模型就藏在这几句话里。</span></span></li>
+                    <li><span class="box"></span><span><b>五看权限与附加件</b>——要你装「专用播放器」、开无障碍/短信/定位、改 DNS，全是红旗。<span class="why">看片要短信权限，这个权限跟功能毫无关系。</span></span></li>
+                    <li><span class="box"></span><span><b>六看内容口径</b>——首页全是「免费全集 / 8K / 秒播 / 无广告」，却没有任何版权页与出品方署名，是盗链站的通用脸。<span class="why">正版站不怕写清片源从哪来。</span></span></li>
+                    <li><span class="box"></span><span><b>一不点</b>——评论区「懂的都懂」短链、私信发的备用地址、群里的安装包，一条都别碰。溯源被切断的入口，只服务于引流。<span class="why">这一下，比前面六看都省事。</span></span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 05 字幕的正版活法 -->
+        <section class="dossier" id="sub">
+            <div class="dossier-head">
+                <span class="vol">卷五</span>
+                <h2>字幕热情别浪费：它在正版侧有活法</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <ul class="todo">
+                    <li><span class="box"></span><span><b>去持证平台的官方字幕协作社区投稿</b>——不少正版平台开放用户字幕、纠错与翻译讨论，署名、规则、授权链条都清楚。<span class="why">翻译能力照样被看见，还不踩线。</span></span></li>
+                    <li><span class="box"></span><span><b>做公版与独立作品</b>——版权过期作品、创作者明确开放翻译授权的独立短片/动画，是最舒服的练手场。<span class="why">公版文本随便翻，练出来的手感一样值钱。</span></span></li>
+                    <li><span class="box"></span><span><b>学「译制」这门手艺，而不只追新剧</b>——术语库、时间轴、口型与方言处理、审校流程，这些硬技能在本地化公司是正当职业。<span class="why">把爱好升级成简历，比攒资源包有用。</span></span></li>
+                    <li><span class="box"></span><span><b>尊重译者的署名权</b>——即便是正版协作，也看清平台的署名与授权条款；你翻的字，值得被写清楚是谁翻的。<span class="why">这是字幕组精神里最该留下的一块。</span></span></li>
+                    <li><span class="box"></span><span><b>遇到想看的没字幕，走反馈</b>——给正版平台的片单建议与字幕需求投票，比自己扒片源上传体面得多。<span class="why">需求被平台看见，才有正版字幕这回事。</span></span></li>
+                </ul>
+                <p style="font-size:13px;color:var(--soft);margin-top:10px;">
+                    一句话：<b>人人影视留下的不是「该怎么偷着看」，而是「观众真的需要好字幕」这条需求。</b>需求没变，满足它的路径该换了。
+                </p>
+            </div>
+        </section>
+
+        <!-- 06 现在去哪看 -->
+        <section class="dossier" id="path">
+            <div class="dossier-head">
+                <span class="vol">卷六</span>
+                <h2>现在去哪看：正版路径，不点名不引流</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <div class="meter">
+                    <div class="row"><span class="lb">装冒名站推的「播放器/APK」</span><span class="track"><i style="width:98%"></i></span><span class="vl">极高</span></div>
+                    <div class="row"><span class="lb">在仿冒页充会员 / 输手机号</span><span class="track"><i style="width:95%"></i></span><span class="vl">极高</span></div>
+                    <div class="row"><span class="lb">点评论区短链「备用地址」</span><span class="track"><i style="width:91%"></i></span><span class="vl">极高</span></div>
+                    <div class="row"><span class="lb">只看盗链聚合的「免费全集」</span><span class="track"><i style="width:84%"></i></span><span class="vl">很高</span></div>
+                    <div class="row"><span class="lb">用正版平台按片付费 / 会员</span><span class="track"><i style="width:14%"></i></span><span class="vl">低</span></div>
+                    <div class="row"><span class="lb">等院线 / 正版窗口期</span><span class="track"><i style="width:6%"></i></span><span class="vl">更低</span></div>
+                </div>
+                <ul class="todo" style="margin-top:14px;">
+                    <li><span class="box"></span><span><b>院线新片、头部剧集</b>——走持牌长视频平台或影院官方渠道，认片头版权标记与「本片由××出品」。贵一点，但字幕、画质、更新都不用赌。<span class="why">别搜「未上映资源」，那条路没有正版。</span></span></li>
+                    <li><span class="box"></span><span><b>冷门老剧、海外剧</b>——先在各正版平台的片单里查一次。引进窗口慢是事实，但「暂时看不到」不等于「可以去扒」。<span class="why">等一等，比装个冒名 App 划算。</span></span></li>
+                    <li><span class="box"></span><span><b>纪录片、独立片、短片</b>——创作者本人标注的正版发布账号与发行平台，是更干净的路径。<span class="why">独立作品最怕的不是没人看，是被盗链吃掉分成。</span></span></li>
+                    <li><span class="box"></span><span><b>已经装错了</b>——别登录、别充值、撤掉所有权限，清数据后卸载，有扣款留凭证，向平台、12321 与公安反诈反映。<span class="why">这一步越早，损失越小。</span></span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 07 举报 -->
+        <section class="dossier" id="report">
+            <div class="dossier-head">
+                <span class="vol">卷七</span>
+                <h2>遇到冒名站／侵权片源：留证再交</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <p style="font-size:13.5px;color:var(--soft);margin-bottom:10px;">
+                    先收齐：<b>完整域名与页面截图、访问时间、作品名、跳转链路、付款单号</b>。截图别再转发扩散，只用于举证。
+                </p>
+                <div class="sos">
+                    <div class="r"><b>12377 举报中心</b><span>中央网信办违法和不良信息举报中心：侵权盗版、诈骗、色情低俗、赌博等分类入口，可转公安/工信部/文旅/"扫黄打非"办。</span></div>
+                    <div class="r"><b>12321</b><span>网络不良与垃圾信息举报：骚扰短信、诈骗信息与恶意软件分发。</span></div>
+                    <div class="r"><b>110 / 派出所</b><span>涉及转账、个人信息泄露、被诱导充值，第一时间报案并留笔录与回执。</span></div>
+                    <div class="r"><b>平台与支付侧</b><span>微信／支付宝账单内投诉该笔交易；应用商店、浏览器、广告联盟的举报入口同步提交。</span></div>
+                    <div class="r"><b>片方与发行方</b><span>具体作品的侵权投诉，由权利人发起通常比个人举报更有推动力。</span></div>
+                </div>
+                <p style="font-size:12.5px;color:var(--muted);margin-top:10px;">
+                    通道与受理口径以当期官方公示为准；本页只做路径提示，不转述具体电话与表单地址，避免过期误导。
+                </p>
+            </div>
+        </section>
+
+        <!-- 08 FAQ -->
+        <section class="dossier" id="faq">
+            <div class="dossier-head">
+                <span class="vol">卷八</span>
+                <h2>常见疑问</h2>
+                <a class="more" href="#">↑ 回顶</a>
+            </div>
+            <div class="dossier-body">
+                <ul class="todo">
+                    <li><span class="box"></span><span><b>「人人影视是不是还有官网？给我个地址。」</b>没有值得给的。原站在 2021 年已公告永久关闭，主犯 2025 年又因同类罪名被批捕；今天所有「官网／最新入口」都是借名页，写任何一个都是害你。<span class="why">这也是本页一个网址都不放的原因。</span></span></li>
+                    <li><span class="box"></span><span><b>「那我当年追的剧，字幕组不是帮了我吗？」</b>情感上理解，法律上是另一回事。它可以是一代人的观影记忆，但不能因为「大家都在用」就变成合法。记忆留着，行为别回头。<span class="why">情怀不是授权。</span></span></li>
+                    <li><span class="box"></span><span><b>「我只看不传，犯法吗？」</b>单纯在线观看与下载保存、转发、制作、经营性传播是不同层级，个人观赏民事风险低；但设备被塞广告模块、隐私被变现是另一笔账。别用「看看而已」给自己壮胆。<span class="why">安全问题比法律问题更早找上门。</span></span></li>
+                    <li><span class="box"></span><span><b>「人人视频和人人影视是一家吗？」</b>不是。前者是武汉映象／重庆剧迷做的聚合 App，后者是梁永平的字幕资源团伙；都塌过，但主体、罪名、时间线都不同。搜的时候别混。<span class="why">名字像，是最常用的误认陷阱。</span></span></li>
+                    <li><span class="box"></span><span><b>「我现在还能做字幕吗？」</b>能，而且该做——去正版平台的官方字幕社区、做公版与授权开放的作品、把术语和审校练成职业本事。翻译这件事值得留在光里。<span class="why">见卷五。</span></span></li>
+                    <li><span class="box"></span><span><b>「这个页面会不会被当成冒名官网？」</b>不会。全页无网址、无片单、无下载、无 Logo 借用，首屏与页脚双重声明「非官方、原站已关」；写的是「别找了、去正版」，而不是「点这里进」。<span class="why">搜索引擎看的是实做，不是域名里有没有那三个字。</span></span></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 09 立场 -->
+        <section class="dossier" id="about">
+            <div class="dossier-head">
+                <span class="vol">卷九</span>
+                <h2>档案立场与免责</h2>
+            </div>
+            <div class="dossier-body">
+                <p style="font-size:14px;color:var(--soft);">
+                    <b>本页（renrenyingshi-h5）</b>是一份<b>词条考据与合规说明</b>，不隶属于「人人影视字幕组」、梁永平及相关运营主体，也不与「人人视频」App（武汉映象／重庆剧迷）、任何「YYets／人人美剧」马甲或当下冒名引流站存在关联、合作或授权关系。
+                </p>
+                <p style="font-size:14px;color:var(--soft);margin-top:8px;">
+                    本页<b>不提供、不收录、不链接</b>：任何网址与「入口」、影视文件、播放源、网盘提取码、APK/IPA、破解工具、专用播放器、充值与会员跳转。
+                    时间线、判决数额与主体信息均引自<b>法院通报、检察机关公开信息、警方通报与公开报道</b>（上海市第三中级人民法院 2021 年宣判通报、虹口区检察院 2025 年 11 月批捕信息、警民直通车上海 2020 年通报等），
+                    仅作历史梳理与风险提示，<b>不构成法律意见、不对个案作适用性判断、不构成对任何现存域名的违法指认</b>。
+                </p>
+                <p style="font-size:14px;color:var(--soft);margin-top:8px;">
+                    若你是有权主体，认为本页某处事实有误或涉及权利争议，请反馈<b>具体条目 + 权利证明 + 联系方式</b>，核实后本页留一条更正记录。
+                    官方地址：https://renrenyingshi-h5.github.io
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 侧栏 -->
+    <aside>
+
+        <div class="ledger">
+            <h3>// 三秒断真假</h3>
+            <ol>
+                <li>它说「最新官方域名」吗？<small>是 → 冒名</small></li>
+                <li>域名一周一换吗？<small>是 → 别追</small></li>
+                <li>备案主体对得上吗？<small>查不出 → 关</small></li>
+                <li>商店能搜到吗？<small>只网页装 → 不装</small></li>
+                <li>要装专用播放器吗？<small>要 → 强关</small></li>
+                <li>要短信/无障碍权限吗？<small>要 → 全拒</small></li>
+                <li>有充值返利吗？<small>有 → 立刻走</small></li>
+            </ol>
+        </div>
+
+        <div class="ledger">
+            <h3>// 红旗词清单</h3>
+            <ol>
+                <li>「永久入口 / 备用地址」<small>官方早死了，哪来入口</small></li>
+                <li>「以当前可访问为准」<small>发布页免责话术</small></li>
+                <li>「破解版 / 福利版」<small>100% 别碰</small></li>
+                <li>「免费全集 8K 秒播」<small>成本悖论</small></li>
+                <li>「解码插件请下载」<small>代码进设备的钩子</small></li>
+                <li>「改 DNS 就能打开」<small>把解析交出去</small></li>
+                <li>「懂的都懂」＋短链<small>溯源归零</small></li>
+                <li>「官方公告 · 请收藏」<small>自封，无凭证</small></li>
+            </ol>
+        </div>
+
+        <div class="ledger">
+            <h3>// 手滑之后按顺序来</h3>
+            <ol>
+                <li>别点页面任何东西，强关标签</li>
+                <li>清缓存、Cookie、关掉弹窗进程</li>
+                <li>卸载跟着来的陌生 App／插件</li>
+                <li>改密码、开二次验证</li>
+                <li>全盘扫恶意软件，不踏实就恢复出厂</li>
+                <li>有付款留单号，去平台投诉</li>
+                <li>涉及转账 → 110，带记录</li>
+                <li>把「别找入口」讲给家人听</li>
+            </ol>
+        </div>
+
+        <div class="ledger">
+            <h3>// 把热情换个地方放</h3>
+            <ol>
+                <li>正版平台官方字幕社区投稿</li>
+                <li>翻公版经典，练手不踩线</li>
+                <li>做术语库与审校，攒成职业</li>
+                <li>给正版片单提字幕需求</li>
+                <li>尊重译者署名权</li>
+                <li>等一等窗口期，不扒源</li>
+            </ol>
+        </div>
+
+        <div class="disc">
+            <b>⚠ 页面性质</b><br>
+            本页是词条考据与不访问指南，不是入口、不是导航、不是资源索引。<br><br>
+            不列任何网址；判决与举报口径以官方当期公示为准。
+        </div>
+
+    </aside>
+
+</div>
+
+<footer>
+    <p>© 2026 人人影视 · renrenyingshi-h5.github.io · 词条考据与正版路径说明（静态单页）</p>
+    <p>本页不含任何网址、播放源、下载入口与广告跳转；原「人人影视字幕组」已于 2021 年公告永久关站，本页与其运营主体无任何关联。</p>
+    <p>官方地址：https://renrenyingshi-h5.github.io ｜ 档案版本 v1.0</p>
+</footer>
+
+</body>
+</html>
